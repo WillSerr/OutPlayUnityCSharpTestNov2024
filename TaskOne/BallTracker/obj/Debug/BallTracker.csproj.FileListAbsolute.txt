@@ -1,0 +1,7 @@
+C:\Users\William\Desktop\UnityProjects\OutPlayUnityCSharpTestNov2024\TaskOne\BallTracker\obj\Debug\BallTracker.csproj.AssemblyReference.cache
+C:\Users\William\Desktop\UnityProjects\OutPlayUnityCSharpTestNov2024\TaskOne\BallTracker\obj\Debug\BallTracker.csproj.CoreCompileInputs.cache
+C:\Users\William\Desktop\UnityProjects\OutPlayUnityCSharpTestNov2024\TaskOne\BallTracker\bin\Debug\BallTracker.exe.config
+C:\Users\William\Desktop\UnityProjects\OutPlayUnityCSharpTestNov2024\TaskOne\BallTracker\bin\Debug\BallTracker.exe
+C:\Users\William\Desktop\UnityProjects\OutPlayUnityCSharpTestNov2024\TaskOne\BallTracker\bin\Debug\BallTracker.pdb
+C:\Users\William\Desktop\UnityProjects\OutPlayUnityCSharpTestNov2024\TaskOne\BallTracker\obj\Debug\BallTracker.exe
+C:\Users\William\Desktop\UnityProjects\OutPlayUnityCSharpTestNov2024\TaskOne\BallTracker\obj\Debug\BallTracker.pdb
