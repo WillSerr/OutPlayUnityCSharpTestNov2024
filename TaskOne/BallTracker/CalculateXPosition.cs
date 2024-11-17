@@ -9,7 +9,7 @@ namespace BallTracker
 {
     internal class CalculateXPosition
     {
-        bool TryCalculateXPositionAtHeight(
+        public bool TryCalculateXPositionAtHeight(
             float h,
             Vector2 p,
             Vector2 v,
@@ -18,9 +18,17 @@ namespace BallTracker
             ref float xPosition)
         {
             float deltaH = h - p.Y;
+            float heightGainedInFlight = 0;
 
-            //Vsqr = Usqr + 2as -> 0 - 2as = Usqr -> s = -(usqr/2a)
-            float heightGainedInFlight = -1 * ((v.Y * v.Y) / (2 * G));
+            if (v.Y > 0) //If traveeling upwards
+            {
+                //Vsqr = Usqr + 2as -> 0 - 2as = Usqr -> s = -(usqr/2a)
+                heightGainedInFlight = -1 * ((v.Y * v.Y) / (2 * G));
+            }
+            else //Ball Dropping
+            {
+                heightGainedInFlight = 0;
+            }
             
             //Needs a readover but should work as far as I can think.
             if(heightGainedInFlight < deltaH)
@@ -32,11 +40,24 @@ namespace BallTracker
             //Calclaute time of flight
             //Using solved quadratic of s = ut + (1/2)a(tsqr)
             float timeOfFlight;
-            //timeOfFlight = -1/a * (U - sqrt((Usqr) + 2as)
-            timeOfFlight = (-1/G) * (v.Y - (float)Math.Sqrt(((v.Y * v.Y) + (2 * G * deltaH))));
+            //timeOfFlight = -1/a * (U + sqrt((Usqr) + 2as)
+            timeOfFlight = (-1/G) * (v.Y + (float)Math.Sqrt(((v.Y * v.Y) + (2 * G * deltaH))));
+            if (timeOfFlight < 0)
+            {
+                timeOfFlight = (-1 / G) * (v.Y - (float)Math.Sqrt(((v.Y * v.Y) + (2 * G * deltaH))));
+            }
 
 
             //Determine latteral travel as a point on a triangle wave
+            float latteralDistance = Math.Abs((v.X * timeOfFlight) + p.X);  //Use absolute so % operator works properly
+
+            float latteralPosition;
+            //Function of a triangle wave = Abs((x % p) - p/2) where amplitude = 1/2 p
+            latteralPosition = Math.Abs((latteralDistance % w) - (0.5f * w)) * 2.0f;
+            latteralPosition = w - latteralPosition; //Shift phase 180 deg
+
+            //Set output
+            xPosition = latteralPosition;
 
             return true;
         }
