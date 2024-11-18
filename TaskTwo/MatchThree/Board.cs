@@ -61,80 +61,120 @@ namespace MatchThree
         Move CalculateBestMoveForBoard()
         {
             int bestMoveValue = 0;
-            Move bestMove;
+            Move bestMove = new Move();
 
             // Implement this function
             for (int x = 0; x < GetWidth(); ++x)
             {
                 for (int y = 0; y < GetHeight(); ++y)
                 {
-                    JewelKind rootJewel = GetJewel(x, y);
-                    int moveValue = 0;
+                    
+                    
 
                     Vector2 position = new Vector2(x, y);
 
                     Vector2 forward = new Vector2(1, 0);
 
-                    Vector2 up = new Vector2(0, -1);
+                    Vector2 up = new Vector2(0, 1);
 
-                    Vector2 down = new Vector2(0, 1);
-                    //for (int i = 0; i < 4; ++i)
+                    //Vector2 down = new Vector2(0, 1);
+                    //for (int i = 0; i < 2; ++i) // check + x and + y
                     //{
 
+                    JewelKind rootJewel = GetJewel(x, y);
+                    Vector2 swappedPeicePosition = (position + forward);
+                    int moveValue = 0;
+
                     //Check forward peices within game board
-                    if ((position + (forward*3)).X > 0 && (position + (forward * 3)).X < GetWidth())
+                    if (swappedPeicePosition.X < 0 || swappedPeicePosition.X > GetWidth() || swappedPeicePosition.Y < 0 || swappedPeicePosition.Y > GetHeight())
                     {
-                        if ((position + (forward * 3)).Y > 0 && (position + (forward * 3)).Y < GetHeight())
-                        {
-
-                            if (GetJewel((int)(position + (forward * 3)).X, (int)(position + (forward * 3)).Y) == rootJewel)
-                            {
-                                if (GetJewel((int)(position + (forward * 2)).X, (int)(position + (forward * 2)).Y) == rootJewel)
-                                {
-                                    moveValue += 2;
-                                }
-                            }
-
-                        }
+                        continue;
                     }
 
-                    //Check upwards peices within game board
-                    if ((position + forward + (up * 2)).X > 0 && (position + forward + (up * 2)).X < GetWidth())
-                    {
-                        if ((position + forward + (up * 2)).Y > 0 && (position + forward + (up * 2)).Y < GetHeight())
-                        {
+                    //Repeat twice to check both swapped peices contribution to the move value
+                    for (int g = 0; g < 2; ++g) {
 
-                            if (GetJewel((int)(position + forward + (up * 2)).X, (int)(position + forward + (up * 2)).Y) == rootJewel)
+                        //Check forward peices within game board
+                        Vector2 threeSpacesForward = (position + (forward * 3));
+                        if (threeSpacesForward.X > 0 && threeSpacesForward.X < GetWidth())
+                        {
+                            if (threeSpacesForward.Y > 0 && threeSpacesForward.Y < GetHeight())
                             {
-                                if (GetJewel((int)(position + forward + up).X, (int)(position + forward + up).Y) == rootJewel)
+
+                                if (GetJewel((int)(position + (forward * 3)).X, (int)(position + (forward * 3)).Y) == rootJewel)
                                 {
-                                    moveValue += 2;
+                                    if (GetJewel((int)(position + (forward * 2)).X, (int)(position + (forward * 2)).Y) == rootJewel)
+                                    {
+                                        moveValue += 2;
+                                    }
+                                }
+
+                            }
+                        }
+
+                        //Peices perpendicular to forward
+                        JewelKind[] perpPeices = { JewelKind.Empty, JewelKind.Empty, rootJewel, JewelKind.Empty, JewelKind.Empty };
+
+                        for (int i = 0; i < perpPeices.Length; ++i)
+                        {
+                            Vector2 checkPos = (position + forward + (up * (2 - i)));
+
+                            if (checkPos.X > 0 && checkPos.X < GetWidth())
+                            {
+                                if (checkPos.Y > 0 && checkPos.Y < GetHeight())
+                                {
+                                    perpPeices[i] = GetJewel((int)checkPos.X, (int)checkPos.Y);
                                 }
                             }
-
                         }
-                    }
 
-                    //Check upwards peices within game board
-                    if ((position + forward + (down * 2)).X > 0 && (position + forward + (down * 2)).X < GetWidth())
-                    {
-                        if ((position + forward + (down * 2)).Y > 0 && (position + forward + (down * 2)).Y < GetHeight())
+                        int chain = 0;
+                        for (int i = 0; i < perpPeices.Length; ++i)
                         {
-
-                            if (GetJewel((int)(position + forward + (down * 2)).X, (int)(position + forward + (down * 2)).Y) == rootJewel)
+                            if (perpPeices[i] == rootJewel)
                             {
-                                if (GetJewel((int)(position + forward + down).X, (int)(position + forward + down).Y) == rootJewel)
-                                {
-                                    moveValue += 2;
-                                }
+                                chain++;
                             }
-
+                            else if (chain < 3)
+                            {
+                                chain = 0;
+                            }
                         }
-                    }
 
-                    //Repeat for the jewel being moved from forward into current position
+                        if (chain > 3)
+                        {
+                            moveValue += chain - 1;
+                        }
+
+                        //Add back in the value of the peice swapped being removed
+                        if (moveValue > 0)
+                        {
+                            moveValue += 1;
+                        }
+
+                        //Repeat for the jewel being moved from forward into current position
+                        position += forward;
+                        forward *= -1;
+                    }
 
                     //If the moveValue > bestMoveValue, update bestMove and bestMoveValue
+                    if(moveValue > bestMoveValue)
+                    {
+                        bestMoveValue = moveValue;
+                        bestMove.x = x; 
+                        bestMove.y = y;
+
+                        //Assuming positive directions are up and right
+                        if (forward.X > 0)
+                        {
+                            bestMove.direction = MoveDirection.Right;
+                        }
+                        else
+                        {
+                            bestMove.direction = MoveDirection.Up;
+                        }
+                    }
+
 
                     //Matrix transform the forward, up and down vectors 90 degrees and repeat until all directions(available moves) are checked
 
