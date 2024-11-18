@@ -9,13 +9,89 @@ namespace MatchThree
 {
     public class Board
     {
-        Board(int width, int height) 
+        public Board(int width, int height)
         {
             boardWidth = width;
             boardHeight = height;
             gameBoard = new JewelKind[width, height];
+
+            Random rand = new Random();
+
+            
+            //Populate the game board
+            for (int x = 0; x < GetWidth(); ++x)
+            {
+                for (int y = 0; y < GetHeight(); ++y)
+                {
+                    bool invalidPlacement = true;
+
+                    //No Matches allowed in initial board
+                    while (invalidPlacement)
+                    {
+                        JewelKind placedJewel = (JewelKind)rand.Next(1,8);
+                        gameBoard[x, y] = placedJewel;
+                        invalidPlacement = false;
+
+                        if (x - 2 > 0)
+                        {
+                            if(gameBoard[x -2, y] == placedJewel && gameBoard[x - 1, y] == placedJewel)
+                            {
+                                invalidPlacement = true;
+                            }
+                        }
+                        if (y - 2 > 0)
+                        {
+                            if (gameBoard[x, y - 2] == placedJewel && gameBoard[x, y - 1] == placedJewel)
+                            {
+                                invalidPlacement = true;
+                            }
+                        }
+                    }
+                }
+            }
         }
 
+        public void DrawBoard()
+        {
+
+            //Populate the game board
+            for (int y = GetHeight()-1; y >= 0 ; --y)
+            {
+                string line = "[";
+                for (int x = 0; x < GetWidth(); ++x)
+                {
+                    switch (gameBoard[x, y])
+                    {
+                        case JewelKind.Empty:
+                            line += " ? ";
+                            break;
+                        case JewelKind.Red:
+                            line += " R ";
+                            break;
+                        case JewelKind.Orange:
+                            line += " O ";
+                            break;
+                        case JewelKind.Yellow:
+                            line += " Y ";
+                            break;
+                        case JewelKind.Green:
+                            line += " G ";
+                            break;
+                        case JewelKind.Blue:
+                            line += " B ";
+                            break;
+                        case JewelKind.Indigo:
+                            line += " I ";
+                            break;
+                        case JewelKind.Violet:
+                            line += " V ";
+                            break;
+                    }
+                }
+                line += "]";
+                Console.WriteLine(line);
+            }
+        }
 
         private int boardWidth;
 
@@ -35,7 +111,7 @@ namespace MatchThree
             Violet
         }
 
-        enum MoveDirection
+        public enum MoveDirection
         {
             Up,
             Down,
@@ -43,7 +119,7 @@ namespace MatchThree
             Right
         }
 
-        struct Move
+        public struct Move
         {
             public int x;
             public int y;
@@ -58,12 +134,12 @@ namespace MatchThree
 
         void SetJewel(int x, int y, JewelKind kind) { gameBoard[x, y] = kind; }
 
-        Move CalculateBestMoveForBoard()
+        public Move CalculateBestMoveForBoard()
         {
             int bestMoveValue = 0;
             Move bestMove = new Move();
 
-            // Implement this function
+            //Traverse the whole game board
             for (int x = 0; x < GetWidth(); ++x)
             {
                 for (int y = 0; y < GetHeight(); ++y)
@@ -77,9 +153,10 @@ namespace MatchThree
 
                     Vector2 up = new Vector2(0, 1);
 
-                    //Vector2 down = new Vector2(0, 1);
-                    //for (int i = 0; i < 2; ++i) // check + x and + y
-                    //{
+
+                    //We are checking the right (+x) and up (+y) moves of every peice 
+                    for (int h = 0; h < 2; ++h) 
+                    {
 
                     JewelKind rootJewel = GetJewel(x, y);
                     Vector2 swappedPeicePosition = (position + forward);
@@ -91,14 +168,14 @@ namespace MatchThree
                         continue;
                     }
 
-                    //Repeat twice to check both swapped peices contribution to the move value
+                    //Repeat twice to check both swapped peices' contribution to the move value
                     for (int g = 0; g < 2; ++g) {
 
                         //Check forward peices within game board
                         Vector2 threeSpacesForward = (position + (forward * 3));
-                        if (threeSpacesForward.X > 0 && threeSpacesForward.X < GetWidth())
+                        if (threeSpacesForward.X >= 0 && threeSpacesForward.X < GetWidth())
                         {
-                            if (threeSpacesForward.Y > 0 && threeSpacesForward.Y < GetHeight())
+                            if (threeSpacesForward.Y >= 0 && threeSpacesForward.Y < GetHeight())
                             {
 
                                 if (GetJewel((int)(position + (forward * 3)).X, (int)(position + (forward * 3)).Y) == rootJewel)
@@ -113,20 +190,23 @@ namespace MatchThree
                         }
 
                         //Peices perpendicular to forward
-                        JewelKind[] perpPeices = { JewelKind.Empty, JewelKind.Empty, rootJewel, JewelKind.Empty, JewelKind.Empty };
+                        JewelKind[] perpPeices = { JewelKind.Empty, JewelKind.Empty, JewelKind.Empty, JewelKind.Empty, JewelKind.Empty };
 
                         for (int i = 0; i < perpPeices.Length; ++i)
                         {
                             Vector2 checkPos = (position + forward + (up * (2 - i)));
 
-                            if (checkPos.X > 0 && checkPos.X < GetWidth())
+                            if (checkPos.X >= 0 && checkPos.X < GetWidth())
                             {
-                                if (checkPos.Y > 0 && checkPos.Y < GetHeight())
+                                if (checkPos.Y >= 0 && checkPos.Y < GetHeight())
                                 {
                                     perpPeices[i] = GetJewel((int)checkPos.X, (int)checkPos.Y);
                                 }
                             }
                         }
+
+                        //Make ot work on post swap data
+                        perpPeices[2] = rootJewel;
 
                         int chain = 0;
                         for (int i = 0; i < perpPeices.Length; ++i)
@@ -176,9 +256,12 @@ namespace MatchThree
                     }
 
 
-                    //Matrix transform the forward, up and down vectors 90 degrees and repeat until all directions(available moves) are checked
+                    //Rotate to point towards up vector as we are checking the right and up moves of every peice 
+                    Vector2 temp = forward;
+                    forward = up;
+                    up = -temp;
 
-                    //}
+                    }
 
 
 
@@ -186,7 +269,7 @@ namespace MatchThree
             }
 
 
-            return new Move();
+            return bestMove;
         }
 
 

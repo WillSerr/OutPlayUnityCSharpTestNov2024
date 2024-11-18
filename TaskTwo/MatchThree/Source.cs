@@ -10,6 +10,26 @@ namespace MatchThree
     {
         static void Main(string[] args)
         {
+            Board gameBoard = new Board(10,10);
+
+            var move = gameBoard.CalculateBestMoveForBoard();
+
+            gameBoard.DrawBoard();
+
+            Console.WriteLine("Best Move: " + move.x.ToString() + ", " + move.y.ToString());
+            switch (move.direction)
+            {
+                case Board.MoveDirection.Right:
+                    Console.WriteLine("Right");
+                    break;
+                case Board.MoveDirection.Up:
+                    Console.WriteLine("Up");
+                    break;
+                default:
+                    Console.WriteLine("Broke");
+                    break;
+            }
+
             return;
         }
     }
