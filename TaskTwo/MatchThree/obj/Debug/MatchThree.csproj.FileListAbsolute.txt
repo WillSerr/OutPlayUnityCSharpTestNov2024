@@ -1,0 +1,7 @@
+C:\Users\William\Desktop\UnityProjects\OutPlayUnityCSharpTestNov2024\TaskTwo\MatchThree\bin\Debug\MatchThree.exe.config
+C:\Users\William\Desktop\UnityProjects\OutPlayUnityCSharpTestNov2024\TaskTwo\MatchThree\bin\Debug\MatchThree.exe
+C:\Users\William\Desktop\UnityProjects\OutPlayUnityCSharpTestNov2024\TaskTwo\MatchThree\bin\Debug\MatchThree.pdb
+C:\Users\William\Desktop\UnityProjects\OutPlayUnityCSharpTestNov2024\TaskTwo\MatchThree\obj\Debug\MatchThree.csproj.AssemblyReference.cache
+C:\Users\William\Desktop\UnityProjects\OutPlayUnityCSharpTestNov2024\TaskTwo\MatchThree\obj\Debug\MatchThree.csproj.CoreCompileInputs.cache
+C:\Users\William\Desktop\UnityProjects\OutPlayUnityCSharpTestNov2024\TaskTwo\MatchThree\obj\Debug\MatchThree.exe
+C:\Users\William\Desktop\UnityProjects\OutPlayUnityCSharpTestNov2024\TaskTwo\MatchThree\obj\Debug\MatchThree.pdb
