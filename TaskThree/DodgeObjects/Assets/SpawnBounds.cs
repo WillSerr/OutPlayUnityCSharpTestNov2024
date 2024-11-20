@@ -13,7 +13,7 @@ public class SpawnBounds : MonoBehaviour
 
         Vector3 halfDimensions = dimensions / 2.0f;
 
-        for (int i = 0; i < 100; ++i)
+        for (int i = 0; i < 100; ++i)   //Spawn 100 objects in random locations within bounds
         {
             Vector3 pos = gameObject.transform.position + new Vector3(Random.Range(-halfDimensions.x, halfDimensions.x), Random.Range(-halfDimensions.y, halfDimensions.y), Random.Range(-halfDimensions.z, halfDimensions.z));
             Instantiate(objectToSpawn, pos, Quaternion.identity);
@@ -22,7 +22,7 @@ public class SpawnBounds : MonoBehaviour
 
     void OnDrawGizmosSelected()
     {
-        // Draw a semitransparent red cube at the transforms position
+        // Draw a semitransparent red cube at the transform's position
         Gizmos.color = new Color(1, 0, 0, 0.5f);
         Gizmos.DrawCube(transform.position, dimensions);
     }

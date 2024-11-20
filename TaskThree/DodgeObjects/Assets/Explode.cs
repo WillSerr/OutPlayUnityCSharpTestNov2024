@@ -11,7 +11,7 @@ public class Explode : MonoBehaviour
     {
         if (explosionObject != null && !dead)
         {
-            dead = true;
+            dead = true;    //prevent multiple explosions from Detonate being called multiple times before the object is destroyed
             Instantiate(explosionObject, gameObject.transform.position, Quaternion.identity);            
         }
         Destroy(gameObject);

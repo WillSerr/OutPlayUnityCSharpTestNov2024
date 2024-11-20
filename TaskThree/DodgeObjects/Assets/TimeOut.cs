@@ -11,6 +11,7 @@ public class TimeOut : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Destroy object after lifetime expires
         if (deathTimer > lifetime)
         {
             Destroy(gameObject);

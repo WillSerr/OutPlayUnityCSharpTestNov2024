@@ -30,7 +30,7 @@ namespace BallTracker
                 heightGainedInFlight = 0;
             }
             
-            //Needs a readover but should work as far as I can think.
+            //If the ball doesnt gain enough height to reach h, return false
             if(heightGainedInFlight < deltaH)
             {
                 return false;
@@ -40,15 +40,16 @@ namespace BallTracker
             //Calclaute time of flight
             //Using solved quadratic of s = ut + (1/2)a(tsqr)
             float timeOfFlight;
-            //timeOfFlight = -1/a * (U + sqrt((Usqr) + 2as)
+            //timeOfFlight = -1/a * (U +/- sqrt((Usqr) + 2as)
             timeOfFlight = (-1/G) * (v.Y + (float)Math.Sqrt(((v.Y * v.Y) + (2 * G * deltaH))));
-            if (timeOfFlight < 0)
+            if (timeOfFlight < 0) //Can't have a negative time of flight
             {
                 timeOfFlight = (-1 / G) * (v.Y - (float)Math.Sqrt(((v.Y * v.Y) + (2 * G * deltaH))));
             }
 
 
             //Determine latteral travel as a point on a triangle wave
+
             float latteralDistance = Math.Abs((v.X * timeOfFlight) + p.X);  //Use absolute so % operator works properly
 
             float latteralPosition;
