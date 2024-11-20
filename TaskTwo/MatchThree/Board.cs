@@ -165,6 +165,9 @@ namespace MatchThree
                         //Check there is a jewel to swap with in forward direction
                         if (swappedPeicePosition.X < 0 || swappedPeicePosition.X >= GetWidth() || swappedPeicePosition.Y < 0 || swappedPeicePosition.Y >= GetHeight())
                         {
+                            //Rotate to point towards up vector as we are checking the right and up moves of every peice                         
+                            forward = new Vector2(0, 1);
+                            up = new Vector2(-1, 0); //vector for backwards
                             continue;
                         }
 
