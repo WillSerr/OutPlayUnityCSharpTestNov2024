@@ -279,6 +279,11 @@ namespace MatchThree
                 }
             }
 
+            if(bestMoveValue < 3)
+            {
+                Console.WriteLine("No Matches Available");
+            }
+
             return bestMove;
         }
 

@@ -26,7 +26,7 @@ namespace MatchThree
                     Console.WriteLine("Up");
                     break;
                 default:
-                    Console.WriteLine("Broke");
+                    Console.WriteLine("Error");
                     break;
             }
 
